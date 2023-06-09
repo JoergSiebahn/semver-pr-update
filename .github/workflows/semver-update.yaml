@@ -1,0 +1,33 @@
+# This workflow takes care about release versions in the code
+name: SemVer Update
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  # build library
+  next-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: build
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Semantic release
+        run: |
+          sudo npm install -g \
+            semantic-release@18.0.0 \
+            @semantic-release/git@10.0.0 \
+            @semantic-release/release-notes-generator@10.0.2 \
+            @semantic-release/github@8.0.0
+
+      - name: Release and Publish
+        run: |
+          semantic-release --dry-run | tee semver-out.txt
