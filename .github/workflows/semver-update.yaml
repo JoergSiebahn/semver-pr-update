@@ -41,6 +41,12 @@ jobs:
           mv -f ".releaserc-new.yaml" ".releaserc.yaml"
 
       - name: Determine Version
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          semantic-release --no-ci --dry-run | tee next.version
+          semantic-release --ci false --dry-run -b "${BRANCH_NAME}" --exec 
+
+      - name: Do something with next version
+        run: |
           cat next.version
+          cat current-version.txt
