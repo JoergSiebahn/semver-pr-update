@@ -34,7 +34,13 @@ jobs:
             @semantic-release/github@8.0.0 \
             @semantic-release/exec@6.0.3
 
+      - name: Disable Semantic Release GitHub Plugin
+        # Disable GitHub plugin as it requires more access than available.
+        run: |
+          cat ".releaserc.yaml" | grep -v "semantic-release/github" > ".releaserc-new.yaml"
+          mv -f ".releaserc-new.yaml" ".releaserc.yaml"
+
       - name: Determine Version
         run: |
-          cat .release
-          semantic-release --no-ci --dry-run | tee semver-out.txt
+          semantic-release --no-ci --dry-run | tee next.version
+          cat next.version
