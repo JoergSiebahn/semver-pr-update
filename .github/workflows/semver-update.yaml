@@ -6,6 +6,10 @@ on:
     branches:
       - main
   pull_request:
+
+permissions:
+  contents: write
+
 jobs:
   # build library
   next-release:
@@ -29,4 +33,4 @@ jobs:
 
       - name: Release and Publish
         run: |
-          semantic-release --dry-run | tee semver-out.txt
+          semantic-release --no-ci --dry-run | tee semver-out.txt
